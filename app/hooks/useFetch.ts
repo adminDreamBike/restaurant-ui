@@ -1,18 +1,24 @@
 import { useState, useEffect } from "react";
 import { searchRecipes } from "../api/httpApi";
+import { AxiosError } from "axios";
 
-export const useFetch = ({ url, params }: { url: string, params?: { query: string } }) => {
+export const useFetch = ({
+  url,
+}: {
+  url: string;
+  params?: { query: string };
+}) => {
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState();
-  const [data, setData] = useState<any>();
+  const [error, setError] = useState<AxiosError>();
+  const [data, setData] = useState();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await searchRecipes({ url, params });
+        const response = await searchRecipes({ url });
         setData(response);
-      } catch (error: any) {
-        setError(error);
+      } catch (error) {
+        setError(error as AxiosError);
       } finally {
         setLoading(false);
       }
@@ -20,7 +26,7 @@ export const useFetch = ({ url, params }: { url: string, params?: { query: strin
     fetchData();
 
     return () => {};
-  }, [url, params]);
+  }, [url]);
 
   return {
     loading,

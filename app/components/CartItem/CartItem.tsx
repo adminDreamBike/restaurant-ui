@@ -1,24 +1,21 @@
 "use client";
 
 import { useCartStore } from "@/app/lib/stores/cart";
-import {
-  Card,
-  Image,
-  IconButton,
-  Text,
-  Flex,
-  Box,
-  Tooltip,
-} from "@chakra-ui/react";
+import { Card, Image, IconButton, Text, Flex, Tooltip } from "@chakra-ui/react";
 import { DeleteIcon, MinusIcon, AddIcon } from "@chakra-ui/icons";
 import { Product } from "@/app/lib/stores/types";
 
-export const CartItem = ({ product }: { product: Product }) => {
-  const { name, description, price, image, quantity } = product;
+export const CartItem = ({
+  product,
+  onRemoveProduct,
+}: {
+  product: Product;
+  onRemoveProduct: (product: Product) => void;
+}) => {
+  const { title, description, price, image, quantity } = product;
   const decreaseQuantity = useCartStore((state) => state.decreaseQuantity);
   const removeFromCart = useCartStore((state) => state.removeFromCart);
   const increaseQuantity = useCartStore((state) => state.increaseQuantity);
-  const totalItems = useCartStore((state) => state.totalItems);
 
   return (
     <Card
@@ -31,7 +28,7 @@ export const CartItem = ({ product }: { product: Product }) => {
       <Image alt="image product" src={image} width="100px" height="100px" />
       <Flex flexDirection="column" flexGrow="1">
         <Text fontWeight="bold" fontSize="xl">
-          {name}
+          {title}
         </Text>
         <Text>{description}</Text>
         <Flex flexDirection="row" flexGrow="1" alignItems="center">
@@ -64,7 +61,7 @@ export const CartItem = ({ product }: { product: Product }) => {
           <IconButton
             icon={<DeleteIcon />}
             aria-label="remove item"
-            onClick={() => removeFromCart(product)}
+            onClick={() => onRemoveProduct(product)}
             backgroundColor="transparent"
           />
         </Tooltip>

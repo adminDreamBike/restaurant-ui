@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export const searchRecipes = async ({ url, params }) => {
+export const searchRecipes = async ({ url }) => {
     // const results = await axios.get(url, {
     //     headers: {
     //         'x-rapidapi-host': 'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com',

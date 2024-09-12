@@ -5,7 +5,6 @@ import {
   InputRightElement,
   Icon,
   Flex,
-  Spinner,
 } from "@chakra-ui/react";
 import { Search2Icon } from "@chakra-ui/icons";
 import { FaRectangleList } from "react-icons/fa6";

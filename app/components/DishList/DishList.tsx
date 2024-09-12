@@ -13,6 +13,7 @@ import { Link } from "@chakra-ui/react";
 import { useFetch } from "@/app/hooks/useFetch";
 import { AddIcon } from "@chakra-ui/icons";
 import { useCartStore } from "@/app/lib/stores/cart";
+import { Product } from "@/app/lib/stores/types";
 
 export const DishList = () => {
   const categories = [
@@ -30,11 +31,11 @@ export const DishList = () => {
     },
   ];
 
-  const { data, loading, error } = useFetch({
+  const { data = [], loading } = useFetch({
     url: "https://66e0bbf32fb67ac16f2a76bb.mockapi.io/products",
   });
 
-  const DishImages = ({ products }) => {
+  const DishImages = ({ products }: {products: Product[]}) => {
     const addToCart = useCartStore((state) => state.addToCart);
 
     return (
@@ -50,7 +51,7 @@ export const DishList = () => {
               <Image
                 rounded="full"
                 src={dish.image}
-                alt={dish.name}
+                alt={dish.title}
                 boxSize="80px"
                 border="2px solid white"
                 boxShadow="0 0 10px #ff922c;"
@@ -90,7 +91,7 @@ export const DishList = () => {
             >
               <DishImages
                 products={data?.filter(
-                  (product) => product.category === category.name
+                  (product: Product) => product.category === category.name
                 )}
               />
             </Card>

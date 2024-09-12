@@ -18,12 +18,11 @@ import { useSearchParams } from "next/navigation";
 import { useFetch } from "@/app/hooks/useFetch";
 import { capitalizeFirstLetter } from "../../lib/utils/utils";
 import { useCartStore } from "@/app/lib/stores/cart";
+import { Product, Rating as RatingType } from "@/app/lib/stores/types";
 
-interface IDish {
-  dish: "lunch" | "dinner" | "breakfast";
-}
-const Rating = ({ rating }) => {
-  const { reviews = "", score = "" } = rating || {};
+
+const Rating = ({ rating }: {rating: RatingType}) => {
+  const { reviews = "", score = 0 } = rating || {};
 
   return (
     <Container
@@ -51,12 +50,12 @@ const Rating = ({ rating }) => {
   );
 };
 
-const Counter = ({ product }) => {
+const Counter = ({ product }: {product: Product }) => {
   const getProduct = useCartStore((state) => state.getProduct);
   const addToCart = useCartStore((state) => state.addToCart);
   const removeFromCart = useCartStore((state) => state.removeFromCart);
-  const totalItems = useCartStore((state) => state.totalItems);
 
+  console.log('getProduct(product.id)?.quantity', getProduct(product.id)?.quantity)
   return (
     <Container display="flex" flexDirection="row" width="auto" margin="0">
       <IconButton
@@ -104,18 +103,17 @@ const FoodDetails = () => {
   );
 };
 
-export const DishDetails = ({ dish }: IDish) => {
+export const DishDetails = () => {
   const searchParams = useSearchParams();
   const idDish = searchParams.get("id");
   const {
     data = [],
     loading,
-    error,
   } = useFetch({
     url: `https://66e0bbf32fb67ac16f2a76bb.mockapi.io/products?id=${idDish}`,
   });
 
-  const { category, image, name, price, ingredients, rating } = data[0] || [];
+  const { category, image, title, price, ingredients, rating }: Product = data[0] || [];
 
   return (
     <Flex justifyContent="center">
@@ -146,7 +144,7 @@ export const DishDetails = ({ dish }: IDish) => {
             justifyContent="space-between"
           >
             <Text fontWeight="bold" fontSize="2xl">
-              {name}
+              {title}
             </Text>
             <Rating rating={rating} />
           </Container>
@@ -175,8 +173,8 @@ export const DishDetails = ({ dish }: IDish) => {
             About
           </Text>
           <UnorderedList marginTop="12px">
-            {ingredients?.map((ingredient) => (
-              <ListItem key={ingredient.id}>{ingredient}</ListItem>
+            {ingredients?.map((ingredient, index) => (
+              <ListItem key={index}>{ingredient}</ListItem>
             ))}
           </UnorderedList>
         </Container>
