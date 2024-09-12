@@ -4,7 +4,7 @@ export interface Rating {
 }
 export interface Product {
   id: number;
-  title: string;
+  name: string;
   description: string;
   price: number;
   discountPercentage: number;
@@ -14,6 +14,6 @@ export interface Product {
   category: string;
   thumbnail: string;
   image: string;
-  quantity?: number;
+  quantity: number;
   ingredients?: Array<string>;
 }

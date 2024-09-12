@@ -28,7 +28,7 @@ export default function RootLayout({
           left="0"
           marginInline="auto"
           width='fit-content'
-          bottom='2%'
+          bottom='-10%'
           fontWeight='bold'
           color='white'
         >

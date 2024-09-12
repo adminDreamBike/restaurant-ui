@@ -25,10 +25,11 @@ export const Header = () => {
           color="#ff922c"
         />
         <MenuList>
-          <MenuItem command="⌘T">Admin</MenuItem>
-          <MenuItem command="⌘N">New Window</MenuItem>
-          <MenuItem command="⌘⇧N">Open Closed Tab</MenuItem>
-          <MenuItem command="⌘O">Open File...</MenuItem>
+          <MenuItem command="⌘T">
+            <Link as={NextLink} href="/admin">
+              Admin
+            </Link>
+          </MenuItem>
         </MenuList>
       </Menu>
       <Text

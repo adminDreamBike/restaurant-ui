@@ -12,10 +12,9 @@ export const CartItem = ({
   product: Product;
   onRemoveProduct: (product: Product) => void;
 }) => {
-  const { title, description, price, image, quantity } = product;
+  const { name, description, price, image, quantity } = product;
   const decreaseQuantity = useCartStore((state) => state.decreaseQuantity);
-  const removeFromCart = useCartStore((state) => state.removeFromCart);
-  const increaseQuantity = useCartStore((state) => state.increaseQuantity);
+  const addToCart = useCartStore((state) => state.addToCart);
 
   return (
     <Card
@@ -28,7 +27,7 @@ export const CartItem = ({
       <Image alt="image product" src={image} width="100px" height="100px" />
       <Flex flexDirection="column" flexGrow="1">
         <Text fontWeight="bold" fontSize="xl">
-          {title}
+          {name}
         </Text>
         <Text>{description}</Text>
         <Flex flexDirection="row" flexGrow="1" alignItems="center">
@@ -40,7 +39,7 @@ export const CartItem = ({
             isRound={true}
             colorScheme="#ff922c"
             color="#ff922c"
-            onClick={() => decreaseQuantity(product.id)}
+            onClick={() => decreaseQuantity(product)}
           />
           <Text margin="0 12px">{quantity}</Text>
           <IconButton
@@ -51,7 +50,7 @@ export const CartItem = ({
             isRound={true}
             colorScheme="#ff922c"
             color="#ff922c"
-            onClick={() => increaseQuantity(product.id)}
+            onClick={() => addToCart(product)}
           />
         </Flex>
       </Flex>

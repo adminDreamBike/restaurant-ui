@@ -10,7 +10,13 @@ import { Search2Icon } from "@chakra-ui/icons";
 import { FaRectangleList } from "react-icons/fa6";
 import { Image } from "@chakra-ui/react";
 
-export const Search = () => {
+export const Search = ({
+  onSearchProuct,
+  valueInput,
+}: {
+  onSearchProuct: (value: string) => void;
+  valueInput: string;
+}) => {
   return (
     <Flex flexDirection="column" padding="0px 40px">
       <InputGroup width="lg">
@@ -22,6 +28,8 @@ export const Search = () => {
           placeholder="Find What you Want"
           _placeholder={{ color: "black" }}
           backgroundColor="#FF922C"
+          onChange={(event) => onSearchProuct(event.target.value)}
+          value={valueInput}
         />
         <InputRightElement pointerEvents="none">
           <Icon as={FaRectangleList} />

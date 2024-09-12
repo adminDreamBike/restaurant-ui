@@ -20,6 +20,7 @@ import { useFetch } from "@/app/hooks/useFetch";
 import { capitalizeFirstLetter } from "../../lib/utils/utils";
 import { useCartStore } from "@/app/lib/stores/cart";
 import { Product, Rating as RatingType } from "@/app/lib/stores/types";
+import { useProductsStore } from "@/app/lib/stores/product";
 
 const Rating = ({ rating }: { rating: RatingType }) => {
   const { reviews = "", score = 0 } = rating || {};
@@ -32,8 +33,9 @@ const Rating = ({ rating }: { rating: RatingType }) => {
       justifyContent="flex-end"
       width="auto"
       margin="0"
+      alignItems="center"
     >
-      {score > 5 ? (
+      {score > 4.5 ? (
         <>
           <StarIcon color="#f2cf63" />
           <StarIcon color="#f2cf63" />
@@ -41,24 +43,24 @@ const Rating = ({ rating }: { rating: RatingType }) => {
           <StarIcon color="#f2cf63" />
           <StarIcon color="#f2cf63" />
         </>
+      ) : score > 3 ? (
+        <>
+          <StarIcon color="#f2cf63" /> <StarIcon color="#f2cf63" />{" "}
+          <StarIcon color="#f2cf63" />
+        </>
       ) : (
         <StarIcon color="#f2cf63" />
       )}
-      <Text fontSize="large">{score}</Text>
-      <Text fontSize="small">({reviews} reviews)</Text>
+      <Text fontSize="2xl">{score}</Text>
+      <Text fontSize="sm">({reviews} reviews)</Text>
     </Container>
   );
 };
 
 const Counter = ({ product }: { product: Product }) => {
-  const getProduct = useCartStore((state) => state.getProduct);
   const addToCart = useCartStore((state) => state.addToCart);
-  const removeFromCart = useCartStore((state) => state.removeFromCart);
+  const decreaseQuantity = useCartStore((state) => state.decreaseQuantity);
 
-  console.log(
-    "getProduct(product.id)?.quantity",
-    getProduct(product.id)?.quantity
-  );
   return (
     <Container display="flex" flexDirection="row" width="auto" margin="0">
       <IconButton
@@ -67,9 +69,9 @@ const Counter = ({ product }: { product: Product }) => {
         isRound={true}
         icon={<FaMinus color="white" />}
         size="sm"
-        onClick={() => removeFromCart(product)}
+        onClick={() => decreaseQuantity(product)}
       />
-      <Text margin="0 14px">{getProduct(product.id)?.quantity || 1}</Text>
+      <Text margin="0 14px">{product.quantity || 0}</Text>
       <IconButton
         backgroundColor="#ff9431"
         aria-label="button plus"
@@ -108,14 +110,20 @@ const FoodDetails = () => {
 
 export const DishDetails = () => {
   const searchParams = useSearchParams();
-  const idDish = searchParams.get("id");
-  const { data = [], loading } = useFetch({
-    url: `https://66e0bbf32fb67ac16f2a76bb.mockapi.io/products?id=${idDish}`,
-  });
+  const idDish = Number(searchParams.get("id"));
+  //   const { data = [], loading } = useFetch({
+  //     url: `https://66e0bbf32fb67ac16f2a76bb.mockapi.io/products?id=${idDish}`,
+  //   });
 
-  const { category, image, title, price, ingredients, rating }: Product =
-    data[0] || [];
+  //   const { category, image, name, price, ingredients, rating }: Product =
+  //     data[0] || [];
 
+  const products = useProductsStore((state) => state.products);
+  const loading = useProductsStore((state) => state.isLoading);
+
+  const filteredProducts = products.filter((product) => product.id === idDish);
+  const { image, category, name, rating, price, ingredients } =
+    filteredProducts[0];
   return (
     <Suspense>
       <Flex justifyContent="center">
@@ -146,7 +154,7 @@ export const DishDetails = () => {
               justifyContent="space-between"
             >
               <Text fontWeight="bold" fontSize="2xl">
-                {title}
+                {name}
               </Text>
               <Rating rating={rating} />
             </Container>
@@ -164,7 +172,7 @@ export const DishDetails = () => {
                   .oo
                 </Text>
               </Flex>
-              <Counter product={data[0]} />
+              <Counter product={filteredProducts[0]} />
             </Container>
             <Flex marginTop="32px" justifyContent="space-between">
               <FoodDetails />
