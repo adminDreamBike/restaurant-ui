@@ -75,8 +75,8 @@ export const DishList = ({products}: {products: Product[]}) => {
     <Flex flexDirection="row" gap="40px">
       {categories?.map((category) => {
         return (
-          <Flex key={category.id} flexDirection="column" align="center">
-            <Text fontWeight="bold" marginBottom="12px">
+          <Flex key={category.id} flexDirection="column" align="center" >
+            <Text fontWeight="bold" marginBottom="12px" >
               {category.name}
             </Text>
             <Card

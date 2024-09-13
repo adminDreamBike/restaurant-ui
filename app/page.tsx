@@ -26,7 +26,7 @@ export default function Home() {
     const filter = products.filter((product) => product.name.includes(value));
     setFilteredProducts(filter);
   };
-  console.log("isLoading", isLoading);
+  
   return (
     <main className="flex flex-col gap-8 row-start-2 items-center ">
       <Text fontSize="3xl">Carlos s Restaurant</Text>

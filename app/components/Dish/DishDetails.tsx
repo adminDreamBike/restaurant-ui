@@ -12,6 +12,7 @@ import {
   UnorderedList,
   ListItem,
   Spinner,
+  Button,
 } from "@chakra-ui/react";
 import { StarIcon } from "@chakra-ui/icons";
 import { FaMinus, FaPlus } from "react-icons/fa";
@@ -57,34 +58,13 @@ const Rating = ({ rating }: { rating: RatingType }) => {
   );
 };
 
-const Counter = ({ product }: { product: Product }) => {
-  const addToCart = useCartStore((state) => state.addToCart);
-  const decreaseQuantity = useCartStore((state) => state.decreaseQuantity);
-
-  return (
-    <Container display="flex" flexDirection="row" width="auto" margin="0">
-      <IconButton
-        backgroundColor="#ff9431"
-        aria-label="button -"
-        isRound={true}
-        icon={<FaMinus color="white" />}
-        size="sm"
-        onClick={() => decreaseQuantity(product)}
-      />
-      <Text margin="0 14px">{product.quantity || 0}</Text>
-      <IconButton
-        backgroundColor="#ff9431"
-        aria-label="button plus"
-        isRound={true}
-        icon={<FaPlus color="white" />}
-        size="sm"
-        onClick={() => addToCart(product)}
-      />
-    </Container>
-  );
-};
-
-const FoodDetails = () => {
+const FoodDetails = ({
+  type,
+  value,
+}: {
+  type: string;
+  value: string;
+}) => {
   return (
     <Editable
       width="120px"
@@ -98,10 +78,10 @@ const FoodDetails = () => {
       <EditablePreview />
       <Flex flexDirection="column">
         <Text color="#ff922c" fontSize="12px">
-          Size
+          {type}
         </Text>
         <Text fontSize="16px" marginTop="8px" fontWeight="600">
-          554 KCal
+          {value}
         </Text>
       </Flex>
     </Editable>
@@ -111,19 +91,20 @@ const FoodDetails = () => {
 export const DishDetails = () => {
   const searchParams = useSearchParams();
   const idDish = Number(searchParams.get("id"));
-  //   const { data = [], loading } = useFetch({
-  //     url: `https://66e0bbf32fb67ac16f2a76bb.mockapi.io/products?id=${idDish}`,
-  //   });
-
-  //   const { category, image, name, price, ingredients, rating }: Product =
-  //     data[0] || [];
 
   const products = useProductsStore((state) => state.products);
   const loading = useProductsStore((state) => state.isLoading);
+  const addToCart = useCartStore((state) => state.addToCart);
 
   const filteredProducts = products.filter((product) => product.id === idDish);
-  const { image, category, name, rating, price, ingredients } =
-    filteredProducts[0];
+  const {
+    image = "",
+    category,
+    name,
+    rating,
+    price,
+    ingredients,
+  } = filteredProducts[0] || {};
   return (
     <Suspense>
       <Flex justifyContent="center">
@@ -140,18 +121,14 @@ export const DishDetails = () => {
               border="4px solid white"
               boxShadow="0 0 10px #ff922c;"
             />
-            <Text
-              paddingRight="1rem"
-              paddingLeft="1rem"
-              fontWeight="200"
-              fontSize="xl"
-            >
+            <Text fontWeight="200" fontSize="xl">
               {capitalizeFirstLetter(category)}
             </Text>
             <Container
               display="flex"
               flexDirection="row"
               justifyContent="space-between"
+              padding="0"
             >
               <Text fontWeight="bold" fontSize="2xl">
                 {name}
@@ -163,6 +140,7 @@ export const DishDetails = () => {
               flexDirection="row"
               justifyContent="space-between"
               marginTop="20px"
+              padding="0"
             >
               <Flex fontSize="xl">
                 <Text fontWeight="bold" color="#ff922c">
@@ -172,12 +150,18 @@ export const DishDetails = () => {
                   .oo
                 </Text>
               </Flex>
-              <Counter product={filteredProducts[0]} />
+              <Button
+                backgroundColor="#ff922c"
+                width="200px"
+                onClick={() => addToCart(filteredProducts[0])}
+              >
+                Add to Cart
+              </Button>
             </Container>
             <Flex marginTop="32px" justifyContent="space-between">
-              <FoodDetails />
-              <FoodDetails />
-              <FoodDetails />
+              <FoodDetails type='Size' value='Medium' />
+              <FoodDetails type='Energy' value='554 KCal' />
+              <FoodDetails type='Delivery' value='45 min' />
             </Flex>
             <Text fontWeight="bold" marginTop="20px">
               About

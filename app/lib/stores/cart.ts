@@ -9,8 +9,8 @@ interface State {
 }
 
 interface Actions {
-  addToCart: (Item: Product) => void;
-  removeFromCart: (Item: Product) => void;
+  addToCart: (item: Product) => void;
+  removeFromCart: (item: Product) => void;
   increaseQuantity: (id: number) => void;
   decreaseQuantity: (item: Product) => void;
   getProduct: (id: number) => Product | null;
