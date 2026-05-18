@@ -1,3 +1,5 @@
+'use client'
+
 import { Admin } from "../components/Admin/Admin";
 
 export default function Page() {
